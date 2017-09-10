@@ -105,6 +105,9 @@ public class Person {
     this.parCh = parCh;
   }
 
+  public int getParChSibSp() {
+    return parCh + sibSp;
+  }
   public long getFare() {
     return fare;
   }

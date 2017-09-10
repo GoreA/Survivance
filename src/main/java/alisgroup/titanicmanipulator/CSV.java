@@ -16,7 +16,7 @@ import org.apache.commons.csv.CSVRecord;
  */
 public class CSV {
 
-  public static List<Person> readPersons(String path) throws FileNotFoundException, IOException {
+  public static List<Person> readPersons(String path) throws IOException {
     List<Person> persons = new ArrayList<>();
     CSVParser parser = new CSVParser(new FileReader(path), CSVFormat.DEFAULT.withHeader());
     for (CSVRecord record : parser) {
@@ -31,14 +31,15 @@ public class CSV {
       person.setSibSp(Integer.parseInt(record.get("SibSp")));
       person.setParCh(Integer.parseInt(record.get("Parch")));
       person.setTicket(record.get("Ticket"));
-      person.setFare(record.get("Fare").equals("") ? 0 : (long) Float.parseFloat(record.get("Fare")));
+      person.setFare(record.get("Fare").equals("") ? 1000 : (long) Float.parseFloat(record.get("Fare")));
       switch (record.get("Embarked")) {
         case "C":
-          person.setEmbarked(1);
+          person.setEmbarked(1); break;
         case "Q":
-          person.setEmbarked(2);
+          person.setEmbarked(2); break;
         case "S":
-          person.setEmbarked(3);
+          person.setEmbarked(3); break;
+        default: person.setEmbarked(0);
       }
       persons.add(person);
     }
@@ -58,7 +59,7 @@ public class CSV {
         oneLine.append(",");
         oneLine.append(person.getName());
         oneLine.append(",");
-        oneLine.append(person.getSibSp() + person.getParCh());
+        oneLine.append(person.getParChSibSp());
         oneLine.append(",");
         oneLine.append(person.getAge());
         oneLine.append(",");
