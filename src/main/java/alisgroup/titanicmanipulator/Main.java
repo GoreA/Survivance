@@ -60,9 +60,10 @@ public class Main {
           else{personsWithFair.add(p);}
       });
       Matrix m = new Matrix();
-      m.createMatrix(personsWithFair, Person.class.getMethod("getpClass"),
+      m = m.createMatrix(personsWithFair, Person.class.getMethod("getpClass"),
               Person.class.getMethod("getParChSibSp"), Person.class.getMethod("getEmbarked")
               , Person.class.getMethod("getFare"));
+
   }
 
   private static void populateAge(List<Person> persons) {
