@@ -32,38 +32,6 @@ public class Matrix {
         return new Matrix(X, Y);
     }
 
-    public float[] calculateTheta(Matrix matrix, float alpha, int iterations){
-        float[] theta = new float[matrix.getMatrixX()[1].length];
-        for (int i = 0; i < theta.length; i++) {
-            theta[0] = 0;
-        }
-        
-//        function [theta, J_history] = gradientDescentMulti(X, y, theta, alpha, num_iters)
-//        GRADIENTDESCENTMULTI Performs gradient descent to learn theta \
-//        theta = GRADIENTDESCENTMULTI(x, y, theta, alpha, num_iters) updates theta by
-//        taking num_iters gradient steps with learning rate alpha
-//        Initialize some useful values
-//        m = length(y); % number of training examples
-//        J_history = zeros(num_iters, 1);
-//
-//        for iter = 1:num_iters
-//        ====================== YOUR CODE HERE ======================
-//        Instructions: Perform a single gradient step on the parameter vector theta.
-//
-//        H = sum((X.*theta')')';
-//
-//        it seems to be a huge difference between theta = theta - sum(alpha*(H-y).*X/m)'; and
-//
-//        theta = theta - alpha/m*sum((H-y).*X)';
-//        ============================================================
-//         Save the cost J in every iteration
-//        J_history(iter) = computeCostMulti(X, y, theta);
-//
-//        end
-
-        return theta;
-    }
-
     public int[][] getMatrixX() {
         return matrixX;
     }
