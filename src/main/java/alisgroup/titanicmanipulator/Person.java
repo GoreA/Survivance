@@ -10,17 +10,17 @@ package alisgroup.titanicmanipulator;
 public class Person {
 
   int id;
-  int survived; //1 - survived, 0 - died
-  int pClass;
+  float survived; //1 - survived, 0 - died
+  float pClass;
   String Name;
   String title;
   String ticket;
-  int sex; //female = 1, male = 0
-  String age;
-  int sibSp;
-  int parCh;
-  long fare;
-  int embarked; // C = 1 Q = 2 S = 3
+  float sex; //female = 1, male = 0
+  float age;
+  float sibSp;
+  float parCh;
+  float fare;
+  float embarked; // C = 1 Q = 2 S = 3
 
   public Person() {
   }
@@ -33,19 +33,19 @@ public class Person {
     this.id = id;
   }
 
-  public int getSurvived() {
+  public float getSurvived() {
     return survived;
   }
 
-  public void setSurvived(int survived) {
+  public void setSurvived(float survived) {
     this.survived = survived;
   }
 
-  public int getpClass() {
+  public float getpClass() {
     return pClass;
   }
 
-  public void setpClass(int pClass) {
+  public void setpClass(float pClass) {
     this.pClass = pClass;
   }
 
@@ -73,54 +73,54 @@ public class Person {
     this.ticket = ticket;
   }
 
-  public int getSex() {
+  public float getSex() {
     return sex;
   }
 
-  public void setSex(int sex) {
+  public void setSex(float sex) {
     this.sex = sex;
   }
 
-  public String getAge() {
+  public float getAge() {
     return age;
   }
 
-  public void setAge(String age) {
+  public void setAge(float age) {
     this.age = age;
   }
 
-  public int getSibSp() {
+  public float getSibSp() {
     return sibSp;
   }
 
-  public void setSibSp(int sibSp) {
+  public void setSibSp(float sibSp) {
     this.sibSp = sibSp;
   }
 
-  public int getParCh() {
+  public float getParCh() {
     return parCh;
   }
 
-  public void setParCh(int parCh) {
+  public void setParCh(float parCh) {
     this.parCh = parCh;
   }
 
-  public int getParChSibSp() {
+  public float getParChSibSp() {
     return parCh + sibSp;
   }
-  public long getFare() {
+  public float getFare() {
     return fare;
   }
 
-  public void setFare(long fare) {
+  public void setFare(float fare) {
     this.fare = fare;
   }
 
-  public int getEmbarked() {
+  public float getEmbarked() {
     return embarked;
   }
 
-  public void setEmbarked(int embarked) {
+  public void setEmbarked(float embarked) {
     this.embarked = embarked;
   }
 

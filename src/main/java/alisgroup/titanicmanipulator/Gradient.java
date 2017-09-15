@@ -1,11 +1,17 @@
 package alisgroup.titanicmanipulator;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Gradient {
 
   public static float[] calculateTheta(Matrix matrix, float alpha, int iterations) {
     //initialise theta. All values should be equal to 0 as starters. The length of Theta should be exual to the number
     //of parameters from one matrixX row
     float[] theta = new float[matrix.getMatrixX()[1].length];
+    float[][] theta_hist = new float[iterations][matrix.getMatrixX()[1].length];
     for (int i = 0; i < theta.length; i++) {
       theta[i] = 0;
     }
@@ -22,7 +28,7 @@ public class Gradient {
 
 //        calculate the cost with obtained theta
       for (int j = 0; j < m; j++) {
-        int[] vectorX = matrix.getMatrixX()[j];
+        float[] vectorX = matrix.getMatrixX()[j];
         for (int k = 0; k < theta.length; k++) {
           cost[j] = cost[j] + theta[k] * vectorX[k];
         }
@@ -31,17 +37,45 @@ public class Gradient {
 //          update theta
       for (int l = 0; l < theta.length; l++) {
         float div = 0;
-        for(int ii = 0; ii < m; ii++){
-          div = div + (cost[ii] - matrix.getMatrixY()[ii]) * matrix.getMatrixX()[ii][l];
+        for (int ll = 0; ll < m; ll++) {
+          div = div + (cost[ll] - matrix.getMatrixY()[ll]) * matrix.getMatrixX()[ll][l];
         }
-        theta[l] = theta[l] - ( alpha/m ) * div;
+        theta[l] = theta[l] - (alpha / m) * div;
       }
-      
-      // TODO need to update J after each iteration.
-      J_history[i] = computeJ(matrix, theta);
 
+      // TODO need to update J after each iteration.
+      float Jpart = 0;
+      for (int t = 0; t < m; t++) {
+        Jpart = (float) (Jpart + Math.pow((cost[t] - matrix.getMatrixY()[t]), 2));
+      }
+      J_history[i] = 1 / (2 * m) * Jpart;
+      theta_hist[i] = theta;
     }
-    return theta;
+    float J_min = J_history[0];
+    int best_iterration = 0;
+    for (int i = 1; i < J_history.length; i++) {
+      if (J_history[i] < J_min) {
+        J_min = J_history[i];
+        best_iterration = i;
+      }
+    }
+    return theta_hist[best_iterration];
+  }
+
+  public static float calculateCost(float[] theta, Person p, Method... methods) {
+    float cost = theta[0];
+    for (int i = 1; i < theta.length; i++) {
+      try {
+        cost = cost + ((float) (methods[i - 1].invoke(p)) * theta[i]);
+      } catch (IllegalAccessException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (IllegalArgumentException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (InvocationTargetException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+    return cost;
   }
 
   private static float computeJ(Matrix matrix, float[] theta) {

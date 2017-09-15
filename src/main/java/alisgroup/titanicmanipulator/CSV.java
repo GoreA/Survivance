@@ -22,16 +22,15 @@ public class CSV {
     for (CSVRecord record : parser) {
       Person person = new Person();
       person.setId(Integer.parseInt(record.get("PassengerId")));
-      person.setSurvived(Integer.parseInt(record.get("Survived")));
-      person.setpClass(Integer.parseInt(record.get("Pclass")));
+      person.setSurvived(Float.parseFloat(record.get("Survived")));
+      person.setpClass(Float.parseFloat(record.get("Pclass")));
       person.setName(record.get("Name"));
       person.setSex(record.get("Sex").equals("male") ? 0 : 1);
-//      person.setAge(record.get("Age").equals("") ? null : (long) Float.parseFloat(record.get("Age")));
-      person.setAge(record.get("Age"));
-      person.setSibSp(Integer.parseInt(record.get("SibSp")));
-      person.setParCh(Integer.parseInt(record.get("Parch")));
+      person.setAge(record.get("Age").equals("") ? 1000 :Float.parseFloat(record.get("Age")));
+      person.setSibSp(Float.parseFloat(record.get("SibSp")));
+      person.setParCh(Float.parseFloat(record.get("Parch")));
       person.setTicket(record.get("Ticket"));
-      person.setFare(record.get("Fare").equals("") ? 1000 : (long) Float.parseFloat(record.get("Fare")));
+      person.setFare(record.get("Fare").equals("") ? 1000 : (float) Float.parseFloat(record.get("Fare")));
       switch (record.get("Embarked")) {
         case "C":
           person.setEmbarked(1); break;
