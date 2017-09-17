@@ -12,9 +12,9 @@ public class Gradient {
     //of parameters from one matrixX row
     float[] theta = new float[matrix.getMatrixX()[1].length];
     float[][] theta_hist = new float[iterations][matrix.getMatrixX()[1].length];
-    for (int i = 0; i < theta.length; i++) {
-      theta[i] = 0;
-    }
+//    for (int i = 0; i < theta.length; i++) {
+//      theta[i] = 0;
+//    }
 
     int m = matrix.getMatrixY().length;
 
@@ -22,7 +22,9 @@ public class Gradient {
     float[] cost = new float[m];
 //        initialise J
     float[] J_history = new float[iterations];
-
+    for (int i = 0; i < J_history.length; i++) {
+      J_history[i] = 1000;
+    }
 //        here the iterations begin
     for (int i = 0; i < iterations; i++) {
 
@@ -48,7 +50,8 @@ public class Gradient {
       for (int t = 0; t < m; t++) {
         Jpart = (float) (Jpart + Math.pow((cost[t] - matrix.getMatrixY()[t]), 2));
       }
-      J_history[i] = 1 / (2 * m) * Jpart;
+      // if we put 1 / (2 * m) instead of just /(2*m) JVM returns us 0. In this case the J will be always 0
+      J_history[i] = Jpart / (2 * m);
       theta_hist[i] = theta;
     }
     float J_min = J_history[0];
@@ -59,6 +62,7 @@ public class Gradient {
         best_iterration = i;
       }
     }
+    System.out.println(best_iterration);
     return theta_hist[best_iterration];
   }
 

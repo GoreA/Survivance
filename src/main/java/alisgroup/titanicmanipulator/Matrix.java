@@ -20,7 +20,7 @@ public class Matrix {
         for(int i = 0; i < persons.size(); i++){
             Person person = persons.get(i);
             for (int j = 0; j < methods.length; j++) {
-                if(j == 0) {X[i][j] = 0;}
+                if(j == 0) {X[i][j] = 1;}
                 else {X[i][j] = (float) methods[j-1].invoke(person);}
             }
         }

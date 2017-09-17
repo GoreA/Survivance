@@ -58,9 +58,11 @@ public class CSV {
         oneLine.append(",");
         oneLine.append(person.getName());
         oneLine.append(",");
-        oneLine.append(person.getParChSibSp());
+        oneLine.append(person.getParCh());
         oneLine.append(",");
-        oneLine.append(person.getAge());
+        oneLine.append(person.getSibSp());
+        oneLine.append(",");
+        oneLine.append(person.getEmbarked());
         oneLine.append(",");
         oneLine.append(person.getSex());
         oneLine.append(",");
@@ -68,7 +70,7 @@ public class CSV {
         oneLine.append(",");
         oneLine.append(person.getTicket());
         oneLine.append(",");
-        oneLine.append(person.getEmbarked());
+        oneLine.append(person.getAge());
         oneLine.append(",");
         oneLine.append(person.getSurvived());
         bw.write(oneLine.toString());

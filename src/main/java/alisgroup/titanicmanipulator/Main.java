@@ -66,12 +66,13 @@ public class Main {
       }
     });
     // To be more precise, these titles should be treated each.
-    populateAge(personsMr);
-    populateAge(personsMrs);
-    populateAge(personsMiss);
+//    populateAge(personsMr);
+//    populateAge(personsMrs);
+//    populateAge(personsMiss);
+
     populateAge(personsMaster);
     
-    csv.exportCSV(persons, "src\\main\\resources\\results.csv");
+    csv.exportCSV(personsMaster, "src\\main\\resources\\results.csv");
   }
 
   private static void populateFare(List<Person> persons) throws NoSuchMethodException {
@@ -124,21 +125,22 @@ public class Main {
     });
  Matrix m = new Matrix();
     try {
-      m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"),
-              Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"),
+      m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+              Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
               Person.class.getMethod("getAge"));
     } catch (InvocationTargetException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     } catch (IllegalAccessException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    float[] theta = Gradient.calculateTheta(m, 0.015f, 2000);
+    float[] theta = Gradient.calculateTheta(m, 0.01f, 1000);
 
     personsWithoutAge.stream().forEach(p -> {
       float age = 0;
       try {
-        age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"),
-                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"));
+        age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
+                Person.class.getMethod("getAge"));
       } catch (NoSuchMethodException ex) {
         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       } catch (SecurityException ex) {
