@@ -65,14 +65,23 @@ public class Main {
           break;
       }
     });
-    // To be more precise, these titles should be treated each.
-//    populateAge(personsMr);
-//    populateAge(personsMrs);
-//    populateAge(personsMiss);
+//     To be more precise, these titles should be treated each.
+    populateAge(personsMr, 0.0015f, 2000);
+    populateAge(personsMrs, 0.001f, 5000);
+    populateAge(personsMiss, 0.0004f, 5000);
+    populateAge(personsMaster, 0.01f, 2000);
 
-    populateAge(personsMaster);
-    
-    csv.exportCSV(personsMaster, "src\\main\\resources\\results.csv");
+    csv.exportCSV(persons, "src\\main\\resources\\results.csv");
+
+//Just a test data
+//    float x[][] = {{1, 3, 4}, {1, 5, 7}, {1, 7, 6}, {1, 4, 8}, {1, 5, 9}};
+//    float y[] = {3, 4, 5, 3, 7};
+//    Matrix m = new Matrix(x, y);
+//    float theta[] = Gradient.calculateTheta(m, 0.01f, 50);
+//    for(int i = 0; i < theta.length; i++){
+//      System.out.println(theta[i]);
+//    }
+//Should obtain : 0.04705481; 0.3663616; 0.38562405
   }
 
   private static void populateFare(List<Person> persons) throws NoSuchMethodException {
@@ -113,7 +122,7 @@ public class Main {
     });
   }
 
-  private static void populateAge(List<Person> persons) throws NoSuchMethodException {
+  private static void populateAge(List<Person> persons, float alpha, int iterations) throws NoSuchMethodException {
     List<Person> personsWithAge = new ArrayList<>();
     List<Person> personsWithoutAge = new ArrayList<>();
     persons.stream().forEach(p -> {
@@ -123,7 +132,7 @@ public class Main {
         personsWithAge.add(p);
       }
     });
- Matrix m = new Matrix();
+    Matrix m = new Matrix();
     try {
       m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
               Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
@@ -133,7 +142,7 @@ public class Main {
     } catch (IllegalAccessException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    float[] theta = Gradient.calculateTheta(m, 0.01f, 1000);
+    float[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
     personsWithoutAge.stream().forEach(p -> {
       float age = 0;

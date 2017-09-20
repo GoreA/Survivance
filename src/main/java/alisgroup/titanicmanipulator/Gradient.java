@@ -12,29 +12,17 @@ public class Gradient {
     //of parameters from one matrixX row
     float[] theta = new float[matrix.getMatrixX()[1].length];
     float[][] theta_hist = new float[iterations][matrix.getMatrixX()[1].length];
-//    for (int i = 0; i < theta.length; i++) {
-//      theta[i] = 0;
-//    }
-
     int m = matrix.getMatrixY().length;
-
 //        initialise cost
     float[] cost = new float[m];
 //        initialise J
-    float[] J_history = new float[iterations];
+    double[] J_history = new double[iterations];
     for (int i = 0; i < J_history.length; i++) {
       J_history[i] = 1000;
     }
+
 //        here the iterations begin
     for (int i = 0; i < iterations; i++) {
-
-//        calculate the cost with obtained theta
-      for (int j = 0; j < m; j++) {
-        float[] vectorX = matrix.getMatrixX()[j];
-        for (int k = 0; k < theta.length; k++) {
-          cost[j] = cost[j] + theta[k] * vectorX[k];
-        }
-      }
 
 //          update theta
       for (int l = 0; l < theta.length; l++) {
@@ -44,17 +32,25 @@ public class Gradient {
         }
         theta[l] = theta[l] - (alpha / m) * div;
       }
+//        calculate the cost with obtained theta
+      for (int j = 0; j < m; j++) {
+        float[] vectorX = matrix.getMatrixX()[j];
+        cost[j] = 0;
+        for (int k = 0; k < theta.length; k++) {
+          cost[j] = cost[j] + theta[k] * vectorX[k];
+        }
+      }
 
       // TODO need to update J after each iteration.
-      float Jpart = 0;
+      double J_part = 0;
       for (int t = 0; t < m; t++) {
-        Jpart = (float) (Jpart + Math.pow((cost[t] - matrix.getMatrixY()[t]), 2));
+        J_part = J_part + Math.pow((cost[t] - matrix.getMatrixY()[t]), 2);
       }
-      // if we put 1 / (2 * m) instead of just /(2*m) JVM returns us 0. In this case the J will be always 0
-      J_history[i] = Jpart / (2 * m);
+      // if we put 1 / (2 * m) instead of just /(2*m) JVM returns us 0. In this case the J will always be 0
+      J_history[i] = J_part / (2 * m);
       theta_hist[i] = theta;
     }
-    float J_min = J_history[0];
+    double J_min = J_history[0];
     int best_iterration = 0;
     for (int i = 1; i < J_history.length; i++) {
       if (J_history[i] < J_min) {
