@@ -7,14 +7,14 @@ import java.util.logging.Logger;
 
 public class Gradient {
 
-  public static float[] calculateTheta(Matrix matrix, float alpha, int iterations) {
+  public static double[] calculateTheta(Matrix matrix, float alpha, int iterations) {
     //initialise theta. All values should be equal to 0 as starters. The length of Theta should be equal to the number
     //of parameters from one matrixX row
-    float[] theta = new float[matrix.getMatrixX()[1].length];
-    float[][] theta_hist = new float[iterations][matrix.getMatrixX()[1].length];
+    double[] theta = new double[matrix.getMatrixX()[1].length];
+    double[][] theta_hist = new double[iterations][matrix.getMatrixX()[1].length];
     int m = matrix.getMatrixY().length;
 //        initialise cost
-    float[] cost = new float[m];
+    double[] cost = new double[m];
 //        initialise J
     double[] J_history = new double[iterations];
     for (int i = 0; i < J_history.length; i++) {
@@ -26,7 +26,7 @@ public class Gradient {
 
 //          update theta
       for (int l = 0; l < theta.length; l++) {
-        float div = 0;
+        double div = 0;
         for (int ll = 0; ll < m; ll++) {
           div = div + (cost[ll] - matrix.getMatrixY()[ll]) * matrix.getMatrixX()[ll][l];
         }
@@ -34,7 +34,7 @@ public class Gradient {
       }
 //        calculate the cost with obtained theta
       for (int j = 0; j < m; j++) {
-        float[] vectorX = matrix.getMatrixX()[j];
+        double[] vectorX = matrix.getMatrixX()[j];
         cost[j] = 0;
         for (int k = 0; k < theta.length; k++) {
           cost[j] = cost[j] + theta[k] * vectorX[k];
@@ -90,13 +90,13 @@ public class Gradient {
       }
 //        calculate the cost with obtained theta
       for (int j = 0; j < m; j++) {
-        float[] vectorX = matrix.getMatrixX()[j];
+        double[] vectorX = matrix.getMatrixX()[j];
         cost[j] = 0;
         for (int k = 0; k < theta.length; k++) {
           cost[j] = cost[j] + theta[k] * vectorX[k];
         }
         //sigmoid function
-        cost[j] = 1/(1 + Math.exp(-cost[j]));
+        cost[j] = Math.log(1/(1 + Math.exp(-cost[j])));
       }
 
       // TODO need to add regularisation.
@@ -119,11 +119,11 @@ public class Gradient {
     System.out.println(best_iterration);
     return theta_hist[best_iterration];
   }
-  public static float calculateCost(float[] theta, Person p, Method... methods) {
-    float cost = theta[0];
+  public static double calculateCost(double[] theta, Person p, Method... methods) {
+    double cost = theta[0];
     for (int i = 1; i < theta.length; i++) {
       try {
-        cost = cost + ((float) (methods[i - 1].invoke(p)) * theta[i]);
+        cost = cost + ((double) (methods[i - 1].invoke(p)) * theta[i]);
       } catch (IllegalAccessException ex) {
         Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
       } catch (IllegalArgumentException ex) {
@@ -133,6 +133,22 @@ public class Gradient {
       }
     }
     return cost;
+  }
+  
+    public static double calculateCostWithSigmoid(double[] theta, Person p, Method... methods) {
+    double cost = theta[0];
+    for (int i = 1; i < theta.length; i++) {
+      try {
+        cost = cost + ((double) (methods[i - 1].invoke(p)) * theta[i]);
+      } catch (IllegalAccessException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (IllegalArgumentException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (InvocationTargetException ex) {
+        Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+    return Math.log(1/(1 + Math.exp(-cost)));
   }
 
   private static float computeJ(Matrix matrix, float[] theta) {

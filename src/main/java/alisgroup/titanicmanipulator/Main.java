@@ -71,6 +71,7 @@ public class Main {
     populateAge(personsMiss, 0.0004f, 5000);
     populateAge(personsMaster, 0.01f, 2000);
 
+    populateSurvivance(persons, 0.001f, 5000);
     csv.exportCSV(persons, "src\\main\\resources\\results.csv");
 
 //Just a test data
@@ -89,7 +90,7 @@ public class Main {
     List<Person> personsWithFair = new ArrayList<>();
     List<Person> personsWithoutFair = new ArrayList<>();
     persons.stream().forEach(p -> {
-      if (Math.round(p.getFare()) == 1000f) {
+      if (Math.round(p.getFare()) == 1000d) {
         personsWithoutFair.add(p);
       } else {
         personsWithFair.add(p);
@@ -105,10 +106,10 @@ public class Main {
     } catch (IllegalAccessException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    float[] theta = Gradient.calculateTheta(m, 0.015f, 2000);
+    double[] theta = Gradient.calculateTheta(m, 0.015f, 2000);
 
     personsWithoutFair.stream().forEach(p -> {
-      float fare = 0;
+      double fare = 0;
       try {
         fare = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"),
                 Person.class.getMethod("getParChSibSp"), Person.class.getMethod("getEmbarked"));
@@ -142,14 +143,13 @@ public class Main {
     } catch (IllegalAccessException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    float[] theta = Gradient.calculateTheta(m, alpha, iterations);
+    double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
     personsWithoutAge.stream().forEach(p -> {
-      float age = 0;
+      double age = 0;
       try {
         age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
-                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
-                Person.class.getMethod("getAge"));
+                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"));
       } catch (NoSuchMethodException ex) {
         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       } catch (SecurityException ex) {
@@ -157,6 +157,48 @@ public class Main {
       }
       p.setAge(age);
 
+    });
+  }
+
+  private static void populateSurvivance(List<Person> persons, float f, int i) {
+    List<Person> personsWithSurvivance = new ArrayList<>();
+    List<Person> personsWithoutSurvivance = new ArrayList<>();
+    persons.stream().forEach(p -> {
+      if (Math.round(p.getSurvived()) == 2) {
+        personsWithoutSurvivance.add(p);
+      } else {
+        personsWithSurvivance.add(p);
+      }
+    });
+
+    Matrix m = new Matrix();
+    try {
+      m = m.createMatrix(personsWithSurvivance, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+              Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
+              Person.class.getMethod("getAge"), Person.class.getMethod("getSurvived"));
+    } catch (InvocationTargetException ex) {
+      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (NoSuchMethodException ex) {
+      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (SecurityException ex) {
+      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    double[] theta = Gradient.calculateThetaWithRegularization(m, f, i);
+
+    personsWithoutSurvivance.stream().forEach(p -> {
+      double survivance = 0;
+      try {
+        survivance = Gradient.calculateCostWithSigmoid(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
+                Person.class.getMethod("getAge"));
+      } catch (NoSuchMethodException ex) {
+        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (SecurityException ex) {
+        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      p.setSurvived(survivance);
     });
   }
 

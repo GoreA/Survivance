@@ -22,23 +22,27 @@ public class CSV {
     for (CSVRecord record : parser) {
       Person person = new Person();
       person.setId(Integer.parseInt(record.get("PassengerId")));
-      person.setSurvived(Float.parseFloat(record.get("Survived")));
-      person.setpClass(Float.parseFloat(record.get("Pclass")));
+      person.setSurvived(Double.parseDouble(record.get("Survived")));
+      person.setpClass(Double.parseDouble(record.get("Pclass")));
       person.setName(record.get("Name"));
       person.setSex(record.get("Sex").equals("male") ? 0 : 1);
-      person.setAge(record.get("Age").equals("") ? 1000 :Float.parseFloat(record.get("Age")));
-      person.setSibSp(Float.parseFloat(record.get("SibSp")));
-      person.setParCh(Float.parseFloat(record.get("Parch")));
+      person.setAge(record.get("Age").equals("") ? 1000 : Double.parseDouble(record.get("Age")));
+      person.setSibSp(Double.parseDouble(record.get("SibSp")));
+      person.setParCh(Double.parseDouble(record.get("Parch")));
       person.setTicket(record.get("Ticket"));
-      person.setFare(record.get("Fare").equals("") ? 1000 : (float) Float.parseFloat(record.get("Fare")));
+      person.setFare(record.get("Fare").equals("") ? 1000 : (double) Double.parseDouble(record.get("Fare")));
       switch (record.get("Embarked")) {
         case "C":
-          person.setEmbarked(1); break;
+          person.setEmbarked(1);
+          break;
         case "Q":
-          person.setEmbarked(2); break;
+          person.setEmbarked(2);
+          break;
         case "S":
-          person.setEmbarked(3); break;
-        default: person.setEmbarked(0);
+          person.setEmbarked(3);
+          break;
+        default:
+          person.setEmbarked(0);
       }
       persons.add(person);
     }
@@ -51,6 +55,8 @@ public class CSV {
       for (Person person : persons) {
         StringBuffer oneLine = new StringBuffer();
         oneLine.append(person.getId());
+        oneLine.append(",");
+        oneLine.append(person.getSurvived());
         oneLine.append(",");
         oneLine.append(person.getpClass());
         oneLine.append(",");
@@ -71,8 +77,6 @@ public class CSV {
         oneLine.append(person.getTicket());
         oneLine.append(",");
         oneLine.append(person.getAge());
-        oneLine.append(",");
-        oneLine.append(person.getSurvived());
         bw.write(oneLine.toString());
         bw.newLine();
         bw.flush();
