@@ -125,5 +125,13 @@ public class Person {
   public void setEmbarked(double embarked) {
     this.embarked = embarked;
   }
+  
+  public double getFairPClass(){
+    return (1.0/pClass) * fare;
+  }
+  
+  public double getParChSibSpProduce(){
+    return (parCh+1)*(sibSp+1);
+  }
 
 }

@@ -66,12 +66,25 @@ public class Main {
       }
     });
 //     To be more precise, these titles should be treated each.
-    populateAge(personsMr, 0.0015f, 2000);
-    populateAge(personsMrs, 0.001f, 5000);
-    populateAge(personsMiss, 0.0004f, 5000);
-    populateAge(personsMaster, 0.01f, 2000);
+    populateAge(personsMr, 0.0015f, 3000);
+    populateAge(personsMrs, 0.001f, 7000);
+    populateAge(personsMiss, 0.0004f, 7000);
+    populateAge(personsMaster, 0.01f, 3000);
 
-    populateSurvivance(persons, 0.001f, 5000);
+    populateSurvivance(personsMr, 0.0015f, 5000);
+    populateSurvivance(personsMrs, 0.001f, 5000);
+    populateSurvivance(personsMiss, 0.0004f, 1000);
+    populateSurvivance(personsMaster, 0.01f, 2000);
+
+//    List<Person> personsWithSurvivance = new ArrayList<>();
+//    List<Person> personsWithoutSurvivance = new ArrayList<>();
+//    persons.stream().forEach(p -> {
+//      if (Math.round(p.getSurvived()) == 2) {
+//        personsWithoutSurvivance.add(p);
+//      } else {
+//        personsWithSurvivance.add(p);
+//      }
+//    });
     csv.exportCSV(persons, "src\\main\\resources\\results.csv");
 
 //Just a test data
@@ -173,8 +186,8 @@ public class Main {
 
     Matrix m = new Matrix();
     try {
-      m = m.createMatrix(personsWithSurvivance, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
-              Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
+      m = m.createMatrix(personsWithSurvivance, Person.class.getMethod("getParChSibSpProduce"),
+              Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
               Person.class.getMethod("getAge"), Person.class.getMethod("getSurvived"));
     } catch (InvocationTargetException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -185,14 +198,14 @@ public class Main {
     } catch (SecurityException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    double[] theta = Gradient.calculateThetaWithRegularization(m, f, i);
+    double[] theta = Gradient.calculateLogisticTheta(m, f, i);
 
     personsWithoutSurvivance.stream().forEach(p -> {
       double survivance = 0;
       try {
-        survivance = Gradient.calculateCostWithSigmoid(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
-                Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
-                Person.class.getMethod("getAge"));
+        survivance = Math.round(Gradient.sigmoid(Gradient.calculateCost(theta, p, Person.class.getMethod("getParChSibSpProduce"),
+              Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
+              Person.class.getMethod("getAge"))));
       } catch (NoSuchMethodException ex) {
         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       } catch (SecurityException ex) {
