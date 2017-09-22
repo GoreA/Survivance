@@ -43,7 +43,7 @@ public class Main {
               }
             });
 
-    populateFare(persons);
+    populateFare(persons, 0.015f, 2000);
     reduceTitles(persons);
     List<Person> personsMr = new ArrayList<>();
     List<Person> personsMrs = new ArrayList<>();
@@ -66,14 +66,14 @@ public class Main {
       }
     });
 //     To be more precise, these titles should be treated each.
-    populateAge(personsMr, 0.0015f, 3000);
-    populateAge(personsMrs, 0.001f, 7000);
-    populateAge(personsMiss, 0.0004f, 7000);
-    populateAge(personsMaster, 0.01f, 3000);
+    populateAge(personsMr, 0.0015f, 5000);
+    populateAge(personsMrs, 0.001f, 10000);
+    populateAge(personsMiss, 0.0004f, 10000);
+    populateAge(personsMaster, 0.01f, 5000);
 
-    populateSurvivance(personsMr, 0.0015f, 5000);
-    populateSurvivance(personsMrs, 0.001f, 5000);
-    populateSurvivance(personsMiss, 0.0004f, 1000);
+    populateSurvivance(personsMr, 0.0015f, 7000);
+    populateSurvivance(personsMrs, 0.001f, 7000);
+    populateSurvivance(personsMiss, 0.0004f, 500);
     populateSurvivance(personsMaster, 0.01f, 2000);
 
 //    List<Person> personsWithSurvivance = new ArrayList<>();
@@ -98,7 +98,7 @@ public class Main {
 //Should obtain : 0.04705481; 0.3663616; 0.38562405
   }
 
-  private static void populateFare(List<Person> persons) throws NoSuchMethodException {
+  private static void populateFare(List<Person> persons, float alpha, int iterations) throws NoSuchMethodException {
 
     List<Person> personsWithFair = new ArrayList<>();
     List<Person> personsWithoutFair = new ArrayList<>();
@@ -119,7 +119,7 @@ public class Main {
     } catch (IllegalAccessException ex) {
       Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     }
-    double[] theta = Gradient.calculateTheta(m, 0.015f, 2000);
+    double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
     personsWithoutFair.stream().forEach(p -> {
       double fare = 0;
@@ -148,7 +148,7 @@ public class Main {
     });
     Matrix m = new Matrix();
     try {
-      m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+      m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
               Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
               Person.class.getMethod("getAge"));
     } catch (InvocationTargetException ex) {
@@ -161,7 +161,7 @@ public class Main {
     personsWithoutAge.stream().forEach(p -> {
       double age = 0;
       try {
-        age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"),
+        age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
                 Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"));
       } catch (NoSuchMethodException ex) {
         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
