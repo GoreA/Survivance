@@ -21,12 +21,11 @@ public class Main {
     private static final String REGEX_NAME = "^[\\p{L} '-]+";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        CSV csv = new CSV();
-        List<Person> persons = csv.readPersons("src\\main\\resources\\total.csv");
+        List<Person> persons = CSV.readPersons("src\\main\\resources\\total.csv");
 
         Pattern paternTitle = Pattern.compile(REGEX_TITLE);
         Pattern paternName = Pattern.compile(REGEX_NAME);
-        persons.stream().forEach(
+        persons.forEach(
                 p -> {
                     String name = p.getName();
                     Matcher mTitle = paternTitle.matcher(name);
@@ -48,7 +47,7 @@ public class Main {
         List<Person> personsMrs = new ArrayList<>();
         List<Person> personsMiss = new ArrayList<>();
         List<Person> personsMaster = new ArrayList<>();
-        persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             switch (p.getTitle()) {
                 case "Mr.":
                     personsMr.add(p);
@@ -84,7 +83,7 @@ public class Main {
 //        personsWithSurvivance.add(p);
 //      }
 //    });
-        csv.exportCSV(persons, "src\\main\\resources\\results.csv");
+        CSV.exportCSV(persons, "src\\main\\resources\\results.csv");
 
 //Just a test data
 //    float x[][] = {{1, 3, 4}, {1, 5, 7}, {1, 7, 6}, {1, 4, 8}, {1, 5, 9}};
@@ -101,7 +100,7 @@ public class Main {
 
         List<Person> personsWithFair = new ArrayList<>();
         List<Person> personsWithoutFair = new ArrayList<>();
-        persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             if (Math.round(p.getFare()) == 1000d) {
                 personsWithoutFair.add(p);
             } else {
@@ -113,21 +112,17 @@ public class Main {
             m = m.createMatrix(personsWithFair, Person.class.getMethod("getpClass"),
                     Person.class.getMethod("getParChSibSp"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getFare"));
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InvocationTargetException | IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
-        personsWithoutFair.stream().forEach(p -> {
+        personsWithoutFair.forEach(p -> {
             double fare = 0;
             try {
                 fare = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"),
                         Person.class.getMethod("getParChSibSp"), Person.class.getMethod("getEmbarked"));
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
+            } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             p.setFare(fare);
@@ -138,7 +133,7 @@ public class Main {
     private static void populateAge(List<Person> persons, float alpha, int iterations) throws NoSuchMethodException {
         List<Person> personsWithAge = new ArrayList<>();
         List<Person> personsWithoutAge = new ArrayList<>();
-        persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             if (Math.round(p.getAge()) == 1000f) {
                 personsWithoutAge.add(p);
             } else {
@@ -150,21 +145,17 @@ public class Main {
             m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
                     Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getAge"));
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InvocationTargetException | IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
-        personsWithoutAge.stream().forEach(p -> {
+        personsWithoutAge.forEach(p -> {
             double age = 0;
             try {
                 age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
                         Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"));
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
+            } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             p.setAge(age);
@@ -175,7 +166,7 @@ public class Main {
     private static void populateSurvivance(List<Person> persons, float f, int i) {
         List<Person> personsWithSurvivance = new ArrayList<>();
         List<Person> personsWithoutSurvivance = new ArrayList<>();
-        persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             if (Math.round(p.getSurvived()) == 2) {
                 personsWithoutSurvivance.add(p);
             } else {
@@ -188,26 +179,18 @@ public class Main {
             m = m.createMatrix(personsWithSurvivance, Person.class.getMethod("getParChSibSpProduce"),
                     Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getAge"), Person.class.getMethod("getSurvived"));
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         double[] theta = Gradient.calculateLogisticTheta(m, f, i);
 
-        personsWithoutSurvivance.stream().forEach(p -> {
+        personsWithoutSurvivance.forEach(p -> {
             double survivance = 0;
             try {
                 survivance = Math.round(Gradient.sigmoid(Gradient.calculateCost(theta, p, Person.class.getMethod("getParChSibSpProduce"),
                         Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
                         Person.class.getMethod("getAge"))));
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
+            } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             p.setSurvived(survivance);
@@ -215,7 +198,7 @@ public class Main {
     }
 
     private static void reduceTitles(List<Person> persons) {
-        persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             switch (p.getTitle()) {
                 case "Capt.":
                     p.setTitle("Mr.");

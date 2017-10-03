@@ -49,7 +49,7 @@ public class CSV {
         return persons;
     }
 
-    public void exportCSV(List<Person> persons, String path) {
+    public static void exportCSV(List<Person> persons, String path) {
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
             for (Person person : persons) {
