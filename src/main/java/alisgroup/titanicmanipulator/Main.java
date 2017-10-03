@@ -14,13 +14,14 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        List<Person> persons = CSV.readPersons("src\\main\\resources\\total.csv");
+        List<Person> persons = Csv.readPersons("src\\main\\resources\\total.csv");
 
         persons.forEach(Person::adjustTitle);
+        persons.forEach(Person::reduceTitle);
         persons.forEach(Person::adjustFare);
 
         populateFare(persons, 0.015f, 2000);
-        persons.forEach(Person::reduceTitle);
+
         List<Person> personsMr = persons.stream().filter(Person::isMr).collect(Collectors.toList());
         List<Person> personsMrs = persons.stream().filter(Person::isMrs).collect(Collectors.toList());
         List<Person> personsMiss = persons.stream().filter(Person::isMiss).collect(Collectors.toList());
@@ -46,7 +47,7 @@ public class Main {
 //        personsWithSurvivance.add(p);
 //      }
 //    });
-        CSV.exportCSV(persons, "src\\main\\resources\\results.csv");
+        Csv.exportCSV(persons, "src\\main\\resources\\results.csv");
 
 //Just a test data
 //    float x[][] = {{1, 3, 4}, {1, 5, 7}, {1, 7, 6}, {1, 4, 8}, {1, 5, 9}};
@@ -60,16 +61,14 @@ public class Main {
     }
 
     private static void populateFare(List<Person> persons, float alpha, int iterations) {
-        List<Person> personsWithFair = persons.stream().filter(p -> !p.isWithoutFare()).collect(Collectors.toList());
-        List<Person> personsWithoutFair = persons.stream().filter(Person::isWithoutFare).collect(Collectors.toList());
+        List<Person> personsWithFare = persons.stream().filter(p -> !p.isWithoutFare()).collect(Collectors.toList());
+        List<Person> personsWithoutFare = persons.stream().filter(Person::isWithoutFare).collect(Collectors.toList());
 
-        Matrix m = Matrix.createMatrix(personsWithFair, "getpClass", "getParChSibSp", "getEmbarked", "getFare");
+        Matrix m = Matrix.createMatrix(personsWithFare, "getpClass", "getParChSibSp", "getEmbarked", "getFare");
         double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
-        personsWithoutFair.forEach(p -> {
-            double fare = Gradient.calculateCost(theta, p,
-                    "getpClass", "getParChSibSp", "getEmbarked");
-
+        personsWithoutFare.forEach(p -> {
+            double fare = Gradient.calculateCost(theta, p, "getpClass", "getParChSibSp", "getEmbarked");
             p.setFare(fare);
         });
     }

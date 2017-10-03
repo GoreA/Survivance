@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author agore
  */
-public class CSV {
+public class Csv {
 
     public static List<Person> readPersons(String path) throws IOException {
         List<Person> persons = new ArrayList<>();
