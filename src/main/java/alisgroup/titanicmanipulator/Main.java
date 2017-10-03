@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author agore
@@ -43,26 +44,11 @@ public class Main {
 
         populateFare(persons, 0.015f, 2000);
         reduceTitles(persons);
-        List<Person> personsMr = new ArrayList<>();
-        List<Person> personsMrs = new ArrayList<>();
-        List<Person> personsMiss = new ArrayList<>();
-        List<Person> personsMaster = new ArrayList<>();
-        persons.forEach(p -> {
-            switch (p.getTitle()) {
-                case "Mr.":
-                    personsMr.add(p);
-                    break;
-                case "Mrs.":
-                    personsMrs.add(p);
-                    break;
-                case "Miss.":
-                    personsMiss.add(p);
-                    break;
-                case "Master.":
-                    personsMaster.add(p);
-                    break;
-            }
-        });
+        List<Person> personsMr = persons.stream().filter(Person::isMr).collect(Collectors.toList());
+        List<Person> personsMrs = persons.stream().filter(Person::isMrs).collect(Collectors.toList());
+        List<Person> personsMiss = persons.stream().filter(Person::isMiss).collect(Collectors.toList());
+        List<Person> personsMaster = persons.stream().filter(Person::isMaster).collect(Collectors.toList());
+
 //     To be more precise, these titles should be treated each.
         populateAge(personsMr, 0.0015f, 5000);
         populateAge(personsMrs, 0.001f, 10000);
@@ -143,8 +129,14 @@ public class Main {
         });
         Matrix m;
         try {
-            m = Matrix.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
-                    Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
+            m = Matrix.createMatrix(personsWithAge,
+                    Person.class.getMethod("getpClass"),
+                    Person.class.getMethod("getFare"),
+                    Person.class.getMethod("getpClass"),
+                    Person.class.getMethod("getSibSp"),
+                    Person.class.getMethod("getParCh"),
+                    Person.class.getMethod("getSibSp"),
+                    Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getAge"));
         } catch (InvocationTargetException | IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -155,8 +147,14 @@ public class Main {
         personsWithoutAge.forEach(p -> {
             double age = 0;
             try {
-                age = Gradient.calculateCost(theta, p, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
-                        Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"));
+                age = Gradient.calculateCost(theta, p,
+                        Person.class.getMethod("getpClass"),
+                        Person.class.getMethod("getFare"),
+                        Person.class.getMethod("getpClass"),
+                        Person.class.getMethod("getSibSp"),
+                        Person.class.getMethod("getParCh"),
+                        Person.class.getMethod("getSibSp"),
+                        Person.class.getMethod("getEmbarked"));
             } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -178,9 +176,12 @@ public class Main {
 
         Matrix m;
         try {
-            m = Matrix.createMatrix(personsWithSurvivance, Person.class.getMethod("getParChSibSpProduce"),
-                    Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
-                    Person.class.getMethod("getAge"), Person.class.getMethod("getSurvived"));
+            m = Matrix.createMatrix(personsWithSurvivance,
+                    Person.class.getMethod("getParChSibSpProduce"),
+                    Person.class.getMethod("getFairPClass"),
+                    Person.class.getMethod("getEmbarked"),
+                    Person.class.getMethod("getAge"),
+                    Person.class.getMethod("getSurvived"));
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             m = Matrix.EMPTY;
@@ -190,8 +191,10 @@ public class Main {
         personsWithoutSurvivance.forEach(p -> {
             double survivance = 0;
             try {
-                survivance = Math.round(Gradient.sigmoid(Gradient.calculateCost(theta, p, Person.class.getMethod("getParChSibSpProduce"),
-                        Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
+                survivance = Math.round(Gradient.sigmoid(Gradient.calculateCost(theta, p,
+                        Person.class.getMethod("getParChSibSpProduce"),
+                        Person.class.getMethod("getFairPClass"),
+                        Person.class.getMethod("getEmbarked"),
                         Person.class.getMethod("getAge"))));
             } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

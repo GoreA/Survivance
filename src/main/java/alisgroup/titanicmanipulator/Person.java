@@ -129,4 +129,19 @@ public class Person {
         return (parCh + 1) * (sibSp + 1);
     }
 
+    public boolean isMr() {
+        return "Mr.".equals(title);
+    }
+
+    public boolean isMrs() {
+        return "Mrs.".equals(title);
+    }
+
+    public boolean isMiss() {
+        return "Miss.".equals(title);
+    }
+
+    public boolean isMaster() {
+        return "Master.".equals(title);
+    }
 }
