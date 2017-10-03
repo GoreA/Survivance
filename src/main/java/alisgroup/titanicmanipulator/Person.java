@@ -8,21 +8,18 @@ package alisgroup.titanicmanipulator;
  */
 public class Person {
 
-    int id;
-    double survived; //1 - survived, 0 - died
-    double pClass;
-    String Name;
-    String title;
-    String ticket;
-    double sex; //female = 1, male = 0
-    double age;
-    double sibSp;
-    double parCh;
-    double fare;
-    double embarked; // C = 1 Q = 2 S = 3
-
-    public Person() {
-    }
+    private int id;
+    private double survived; //1 - survived, 0 - died
+    private double pClass;
+    private String Name;
+    private String title;
+    private String ticket;
+    private double sex; //female = 1, male = 0
+    private double age;
+    private double sibSp;
+    private double parCh;
+    private double fare;
+    private double embarked; // C = 1 Q = 2 S = 3
 
     public int getId() {
         return id;
@@ -31,7 +28,6 @@ public class Person {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public double getParChSibSp() {
         return parCh + sibSp;
