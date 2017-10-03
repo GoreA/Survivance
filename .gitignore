@@ -1,0 +1,13 @@
+# Compiled source #
+###################
+*.class
+target/
+classes/
+
+# Intellij files and folders #
+#############################
+.idea/
+*.iml
+*.ipr
+*.iws
+.gitignore
