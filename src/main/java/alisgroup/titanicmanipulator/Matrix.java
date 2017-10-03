@@ -5,18 +5,20 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class Matrix {
-    double matrixX[][];
-    double matrixY[];
+    private double matrixX[][];
+    private double matrixY[];
 
-    public Matrix() {
+    public static Matrix EMPTY = new Matrix();
+
+    private Matrix() {
     }
 
-    public Matrix(double[][] matrixX, double[] matrixY) {
+    private Matrix(double[][] matrixX, double[] matrixY) {
         this.matrixX = matrixX;
         this.matrixY = matrixY;
     }
 
-    public <Person> Matrix createMatrix(List<Person> persons, Method... methods) throws InvocationTargetException, IllegalAccessException {
+    public static <Person> Matrix createMatrix(List<Person> persons, Method... methods) throws InvocationTargetException, IllegalAccessException {
         double[][] X = new double[persons.size()][methods.length];
         double[] Y = new double[persons.size()];
         for (int i = 0; i < persons.size(); i++) {

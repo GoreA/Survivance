@@ -107,13 +107,14 @@ public class Main {
                 personsWithFair.add(p);
             }
         });
-        Matrix m = new Matrix();
+        Matrix m;
         try {
-            m = m.createMatrix(personsWithFair, Person.class.getMethod("getpClass"),
+            m = Matrix.createMatrix(personsWithFair, Person.class.getMethod("getpClass"),
                     Person.class.getMethod("getParChSibSp"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getFare"));
         } catch (InvocationTargetException | IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            m = Matrix.EMPTY;
         }
         double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
@@ -140,13 +141,14 @@ public class Main {
                 personsWithAge.add(p);
             }
         });
-        Matrix m = new Matrix();
+        Matrix m;
         try {
-            m = m.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
+            m = Matrix.createMatrix(personsWithAge, Person.class.getMethod("getpClass"), Person.class.getMethod("getFare"), Person.class.getMethod("getpClass"), Person.class.getMethod("getSibSp"),
                     Person.class.getMethod("getParCh"), Person.class.getMethod("getSibSp"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getAge"));
         } catch (InvocationTargetException | IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            m = Matrix.EMPTY;
         }
         double[] theta = Gradient.calculateTheta(m, alpha, iterations);
 
@@ -174,13 +176,14 @@ public class Main {
             }
         });
 
-        Matrix m = new Matrix();
+        Matrix m;
         try {
-            m = m.createMatrix(personsWithSurvivance, Person.class.getMethod("getParChSibSpProduce"),
+            m = Matrix.createMatrix(personsWithSurvivance, Person.class.getMethod("getParChSibSpProduce"),
                     Person.class.getMethod("getFairPClass"), Person.class.getMethod("getEmbarked"),
                     Person.class.getMethod("getAge"), Person.class.getMethod("getSurvived"));
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            m = Matrix.EMPTY;
         }
         double[] theta = Gradient.calculateLogisticTheta(m, f, i);
 
