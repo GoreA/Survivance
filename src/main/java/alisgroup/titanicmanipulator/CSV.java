@@ -30,7 +30,7 @@ public class CSV {
             person.setSibSp(Double.parseDouble(record.get("SibSp")));
             person.setParCh(Double.parseDouble(record.get("Parch")));
             person.setTicket(record.get("Ticket"));
-            person.setFare(record.get("Fare").equals("") ? 1000 : (double) Double.parseDouble(record.get("Fare")));
+            person.setFare(record.get("Fare").equals("") ? 1000 : Double.parseDouble(record.get("Fare")));
             switch (record.get("Embarked")) {
                 case "C":
                     person.setEmbarked(1);
@@ -82,12 +82,8 @@ public class CSV {
                 bw.flush();
             }
             bw.close();
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("UnsupportedEncodingException");
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException");
-        } catch (IOException e) {
-            System.out.println("IOException");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

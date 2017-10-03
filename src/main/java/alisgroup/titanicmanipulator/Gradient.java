@@ -118,16 +118,22 @@ public class Gradient {
         return theta_hist[best_iterration];
     }
 
-    public static double calculateCost(double[] theta, Person p, Method... methods) {
-        double cost = theta[0];
-        for (int i = 1; i < theta.length; i++) {
-            try {
-                cost = cost + ((double) (methods[i - 1].invoke(p)) * theta[i]);
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+    public static double calculateCost(double[] theta, Person p, String... methodNames) {
+        try {
+            Method[] methods = new Method[methodNames.length];
+            for (int i = 0; i < methodNames.length; i++) {
+                String methodName = methodNames[i];
+                methods[i] = Person.class.getMethod(methodName);
             }
+            double cost = theta[0];
+            for (int i = 1; i < theta.length; i++) {
+                cost = cost + ((double) (methods[i - 1].invoke(p)) * theta[i]);
+            }
+            return cost;
+        } catch (ReflectiveOperationException | IllegalArgumentException ex) {
+            Logger.getLogger(Gradient.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-        return cost;
     }
 
     public static double sigmoid(double cost) {
