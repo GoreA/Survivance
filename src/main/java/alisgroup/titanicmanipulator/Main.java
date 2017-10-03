@@ -16,11 +16,11 @@ public class Main {
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<Person> persons = Csv.readPersons("src\\main\\resources\\total.csv");
 
+        persons.forEach(Person::adjustFare);
+        populateFare(persons, 0.015f, 2000);
+
         persons.forEach(Person::adjustTitle);
         persons.forEach(Person::reduceTitle);
-        persons.forEach(Person::adjustFare);
-
-        populateFare(persons, 0.015f, 2000);
 
         List<Person> personsMr = persons.stream().filter(Person::isMr).collect(Collectors.toList());
         List<Person> personsMrs = persons.stream().filter(Person::isMrs).collect(Collectors.toList());
