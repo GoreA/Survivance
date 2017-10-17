@@ -91,6 +91,11 @@ public class Person {
         return age;
     }
 
+    public double getAgeIndex(){
+      double index = 3/Math.sqrt(1 + Math.pow((age - 40)/20, 2));
+      return index;
+    }
+            
     public void setAge(double age) {
         this.age = age;
     }
@@ -179,6 +184,10 @@ public class Person {
         if (fare != 1000) {
             fare = fare / (sibSp + parCh + 1);
         }
+    }
+    
+    public double getAgeIndexSQRPClass(){
+      return getAgeIndex() * getpClass() * getParChSibSpProduce()/(getSex() * getAge());
     }
 
     //Capt.         1

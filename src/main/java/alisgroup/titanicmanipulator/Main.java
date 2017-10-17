@@ -38,15 +38,6 @@ public class Main {
         populateSurvivance(personsMiss, 0.0004f, 500);
         populateSurvivance(personsMaster, 0.01f, 1500);
 
-//    List<Person> personsWithSurvivance = new ArrayList<>();
-//    List<Person> personsWithoutSurvivance = new ArrayList<>();
-//    persons.stream().forEach(p -> {
-//      if (Math.round(p.getSurvived()) == 2) {
-//        personsWithoutSurvivance.add(p);
-//      } else {
-//        personsWithSurvivance.add(p);
-//      }
-//    });
         Csv.exportCSV(persons, "src\\main\\resources\\results.csv");
 
 //Just a test data
@@ -95,12 +86,12 @@ public class Main {
         List<Person> personsWithoutSurvivance = persons.stream().filter(Person::isWithoutSurvivance).collect(Collectors.toList());
 
         Matrix m = Matrix.createMatrix(personsWithSurvivance,
-                "getParChSibSpProduce", "getFairPClass", "getEmbarked", "getAge", "getSurvived");
+                "getParChSibSpProduce", "getFairPClass", "getEmbarked", "getAgeIndex", "getSurvived");
         double[] theta = Gradient.calculateLogisticTheta(m, f, i);
 
         personsWithoutSurvivance.forEach(p -> {
             double survivance = Math.round(Gradient.sigmoid(Gradient.calculateCost(theta, p,
-                    "getParChSibSpProduce", "getFairPClass", "getEmbarked", "getAge")));
+                    "getParChSibSpProduce", "getFairPClass", "getEmbarked", "getAgeIndex"))); //"getAgeIndexSQRPClass"
             p.setSurvived(survivance);
         });
     }
