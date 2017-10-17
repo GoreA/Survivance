@@ -17,7 +17,7 @@ public class Main {
         List<Person> persons = Csv.readPersons("src\\main\\resources\\total.csv");
 
         persons.forEach(Person::adjustFare);
-        populateFare(persons, 0.015f, 2000);
+        populateFare(persons, 0.015f, 1000);
 
         persons.forEach(Person::adjustTitle);
         persons.forEach(Person::reduceTitle);
@@ -28,15 +28,15 @@ public class Main {
         List<Person> personsMaster = persons.stream().filter(Person::isMaster).collect(Collectors.toList());
 
 //     To be more precise, these titles should be treated each.
-        populateAge(personsMr, 0.0015f, 5000);
-        populateAge(personsMrs, 0.001f, 10000);
-        populateAge(personsMiss, 0.0004f, 10000);
-        populateAge(personsMaster, 0.01f, 5000);
+        populateAge(personsMr, 0.0015f, 1500);
+        populateAge(personsMrs, 0.001f, 1500);
+        populateAge(personsMiss, 0.0004f, 1500);
+        populateAge(personsMaster, 0.01f, 1500);
 
-        populateSurvivance(personsMr, 0.0015f, 7000);
-        populateSurvivance(personsMrs, 0.001f, 7000);
+        populateSurvivance(personsMr, 0.0015f, 1500);
+        populateSurvivance(personsMrs, 0.001f, 1500);
         populateSurvivance(personsMiss, 0.0004f, 500);
-        populateSurvivance(personsMaster, 0.01f, 2000);
+        populateSurvivance(personsMaster, 0.01f, 1500);
 
 //    List<Person> personsWithSurvivance = new ArrayList<>();
 //    List<Person> personsWithoutSurvivance = new ArrayList<>();
