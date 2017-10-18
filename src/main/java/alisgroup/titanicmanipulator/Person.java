@@ -26,6 +26,7 @@ public class Person {
     private double parCh;
     private double fare;
     private double embarked; // C = 1 Q = 2 S = 3
+    private double survivanceIndex = -1; //default value
 
     public int getId() {
         return id;
@@ -89,11 +90,6 @@ public class Person {
 
     public double getAge() {
         return age;
-    }
-
-    public double getAgeIndex(){
-      double index = 3/Math.sqrt(1 + Math.pow((age - 40)/20, 2));
-      return index;
     }
             
     public void setAge(double age) {
@@ -186,8 +182,12 @@ public class Person {
         }
     }
     
-    public double getAgeIndexSQRPClass(){
-      return getAgeIndex() * getpClass() * getParChSibSpProduce()/(getSex() * getAge());
+    public void setSurvivanceIndex(double index){
+      this.survivanceIndex = index;
+    }
+    
+    public double getSurvivanceIndex(){
+      return survivanceIndex;
     }
 
     //Capt.         1
